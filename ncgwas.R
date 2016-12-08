@@ -112,7 +112,7 @@ for(i in keepchr){
   parts <- splitup(c(1,nsnp), 10)
   for(p in parts){
     #Splitup task into indices for workers
-    bits <- splitup(p,nworkers*10)
+    bits <- splitup(p,nworkers)
     res <- mpi.parLapply(bits, function(k) {
       #Open nc file, get SNP names and create results dataset
       nc <- nc_open(paste0(gpath,study,'-chr',i,'-c.nc'))
