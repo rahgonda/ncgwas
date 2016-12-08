@@ -1,5 +1,6 @@
 #### contact baldassa@email.unc.edu for questions
-
+library(devtools)
+install_github("Rdatatable/data.table", build_vignettes=FALSE)
 library(data.table)
 library(ncdf4)
 library(RcppEigen)
@@ -12,16 +13,19 @@ library(speedglm)
 #Modifying this file 
 
 phenodir <- "/nas02/depts/epi/CVDGeneNas/antoine/ECG_GWAS/WHI/phenotypes/" #phenotype file directory
+pheno <- "ecg_whi_whites_fi.txt" #Name of the .txt or .csv phenotype file
+pheno_id <- "id" #Name of the participant ID in the phenotype file
+
 resdir <- "/proj/epi/CVDGeneNas/antoine/dev_garnetmpi/test_results/" #where to store results
 gpath <- "/nas02/depts/epi/Genetic_Data_Center/whi_share/whi_1000g_fh_imp/ncdf-data/" #where the 1KG .nc files live
 study <- "GARNET" #the WHI study
+
 outcome <- "jt" #The outcome of interest
 form <- ~g+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10+region+rr_d+age
-pheno <- "ecg_whi_whites_fi.txt" #Name of the .txt phenotype file
 type <- "linear" #Right now just "linear" or "logistic"
-
 family <- "" #Optional: family for GLM -- default is binomial. 
 link <- "" #Optional: GLM link function -- default is family default (e.g. logit for binomial)
+
 keepchr <- 22 #Chromosomes to restrict to
 
 ############# end of inputs ######################################################################################
@@ -29,8 +33,8 @@ keepchr <- 22 #Chromosomes to restrict to
 #Load and pare down data
 Epidata <- fread(paste0(phenodir,pheno))
 Epidata[,c("g"):=rnorm(nrow(Epidata))]
-Epidata <- na.omit(Epidata[,c("id", outcome, all.vars(form)), with = F])
-setnames(Epidata, "id", "Common_ID")
+Epidata <- na.omit(Epidata[,c(pheno_id, outcome, all.vars(form)), with = F])
+setnames(Epidata, pheno_id, "Common_ID")
 setkey(Epidata, Common_ID)
 
 #order ids as in NC file
