@@ -1,6 +1,7 @@
 #### contact baldassa@email.unc.edu for questions
-library(devtools)
-install_github("Rdatatable/data.table", build_vignettes=FALSE)
+
+#library(devtools)
+#install_github("Rdatatable/data.table", build_vignettes=FALSE)
 library(data.table)
 library(ncdf4)
 library(RcppEigen)
